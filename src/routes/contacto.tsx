@@ -23,7 +23,15 @@ export const Route = createFileRoute("/contacto")({
   component: Contacto,
 });
 
-function Row({ label, value, href }: { label: string; value: string; href?: string }) {
+function Row({
+  label,
+  value,
+  href,
+}: {
+  label: string;
+  value: string;
+  href?: string | undefined;
+}) {
   return (
     <div className="border-b border-hairline py-8">
       <span className="text-[11px] tracking-[0.3em] text-secondary-text">
