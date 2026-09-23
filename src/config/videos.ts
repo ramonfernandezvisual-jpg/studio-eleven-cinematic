@@ -89,7 +89,7 @@ export function youtubeId(url: string): string | null {
       const v = u.searchParams.get("v");
       if (v) return v;
       const m = u.pathname.match(/\/(shorts|embed|live)\/([\w-]+)/);
-      if (m) return m[2];
+      if (m && m[2]) return m[2];
     }
   } catch {
     return null;
