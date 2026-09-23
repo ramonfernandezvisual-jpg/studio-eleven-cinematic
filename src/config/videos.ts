@@ -84,7 +84,7 @@ export function youtubeId(url: string): string | null {
   try {
     const u = new URL(url.trim());
     const host = u.hostname.replace(/^www\./, "");
-    if (host === "youtu.be") return u.pathname.slice(1).split("/")[0] || null;
+    if (host === "youtu.be") return u.pathname.slice(1).split("/")[0] ?? null;
     if (host.endsWith("youtube.com") || host.endsWith("youtube-nocookie.com")) {
       const v = u.searchParams.get("v");
       if (v) return v;
