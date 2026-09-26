@@ -9,7 +9,7 @@ export const defaultLocale: Locale = "es";
 
 const dictionaries: Record<string, Dictionary> = { es };
 
-export function useT(locale: Locale = defaultLocale): Dictionary {
+export function getDictionary(locale: Locale = defaultLocale): Dictionary {
   return dictionaries[locale] ?? es;
 }
 

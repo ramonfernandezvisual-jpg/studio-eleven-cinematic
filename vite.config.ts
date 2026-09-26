@@ -12,13 +12,7 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
     // Web 100 % estática: cada página se genera como HTML durante la construcción.
-    pages: [
-      { path: "/" },
-      { path: "/proyectos" },
-      { path: "/servicios" },
-      { path: "/estudio" },
-      { path: "/contacto" },
-    ],
+    pages: [{ path: "/" }],
     prerender: { enabled: true, autoStaticPathsDiscovery: false },
   },
 });

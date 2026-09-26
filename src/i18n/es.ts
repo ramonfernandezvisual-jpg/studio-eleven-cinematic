@@ -1,88 +1,73 @@
 export const es = {
+  meta: {
+    title: "Studio Eleven Cinematic",
+    description: "Estudio creativo de contenido cinematográfico para marcas y negocios.",
+  },
   nav: {
+    brand: "Studio Eleven Cinematic",
     inicio: "Inicio",
     proyectos: "Proyectos",
-    servicios: "Servicios",
     estudio: "Estudio",
     contacto: "Contacto",
+    mainNav: "Navegación principal",
   },
-  home: {
-    heroTitle: "Vídeo cinematográfico creado con inteligencia artificial",
-    heroSubtitle: "Para marcas que quieren verse distintas.",
-    scroll: "Desliza",
-    s1Title: "Cine, no contenido",
-    s1Body:
-      "Cada pieza se piensa como una escena: luz, ritmo y silencio. La IA es la herramienta; la dirección sigue siendo humana.",
-    s2Title: "De la idea al máster en días",
-    s2Body:
-      "Sin localizaciones, sin equipos de rodaje, sin esperas. Un proceso corto que mantiene intacto el nivel de acabado.",
-    s3Title: "Un estudio, todos los formatos",
-    s3Body:
-      "Horizontal para campañas y web. Vertical para redes y avatares. Mismo lenguaje visual en todas partes.",
-    ctaTitle: "Cuéntanos tu marca",
-    ctaBody: "Respondemos en menos de 24 horas.",
-    ctaLink: "Hablar con el estudio",
-  },
-  proyectos: {
-    title: "Proyectos",
-    intro:
-      "Una selección de piezas por sector. Cada vídeo se reproduce desde YouTube al pulsar.",
-    horizontal: "Horizontal",
-    vertical: "Vertical",
-  },
-  servicios: {
-    title: "Servicios",
-    intro: "Producción audiovisual con IA, de principio a fin.",
-    items: [
-      {
-        title: "Spots de marca",
-        body: "Piezas cinematográficas de 15 a 60 segundos para campañas y web.",
-      },
-      {
-        title: "Producto y e-commerce",
-        body: "Planos de producto con acabado publicitario, sin set de rodaje.",
-      },
-      {
-        title: "Avatares con IA",
-        body: "Presentadores digitales con voz y guion para formatos verticales.",
-      },
-      {
-        title: "Redes sociales",
-        body: "Series de piezas verticales pensadas para el ritmo del feed.",
-      },
-      {
-        title: "Dirección creativa",
-        body: "Concepto, guion, moodboard y dirección de arte antes de generar nada.",
-      },
-      {
-        title: "Postproducción",
-        body: "Montaje, color, sonido y máster final en todos los formatos.",
-      },
-    ],
-  },
-  estudio: {
-    title: "Estudio",
-    lead: "Studio Eleven Cinematic es un estudio de vídeo cinematográfico hecho con inteligencia artificial para marcas.",
-    body1:
-      "Trabajamos con un equipo reducido y herramientas generativas de última generación. Eso nos permite mantener el criterio de un estudio clásico con los tiempos y los costes de la producción digital.",
-    body2:
-      "Creemos en menos piezas y mejor hechas: una imagen que se recuerda vale más que un calendario lleno.",
-    emblemAlt: "Emblema de Studio Eleven Cinematic",
-  },
-  contacto: {
-    title: "Contacto",
-    intro: "Escríbenos y empezamos por una conversación.",
-    email: "Email",
-    whatsapp: "WhatsApp",
-    booking: "Reservar una llamada",
-    pending: "Pendiente de configurar",
-  },
-  footer: {
-    rights: "Todos los derechos reservados.",
+  hero: {
+    aria: "Portada",
+    kicker: "Trabajos 2026",
+    title: "Contenido cinematográfico para marcas y negocios.",
+    ctaProjects: "Ver proyectos por sector",
+    ctaContact: "Hablemos",
     logoAlt: "Studio Eleven Cinematic",
   },
-  videoPlaceholder: "Vídeo pendiente",
-  play: "Reproducir vídeo",
+  sectores: {
+    kicker: "Proyectos por sector",
+    title: "Encuentra tu sector.",
+    intro: "Cada sector tiene su pieza horizontal para la web y su versión vertical para las redes.",
+    tabsAria: "Sectores",
+    horizontalMeta: "Horizontal 16:9 · Próximamente",
+    verticalMeta: "Vertical 9:16",
+    formats: "Horizontal 16:9 · Vertical 9:16",
+    play: "Reproducir",
+  },
+  estudio: {
+    kicker: "Estudio",
+    lead: "Cada detalle, pensado para que tu negocio se vea, se entienda y se recuerde.",
+    body1:
+      "Studio Eleven Cinematic es un estudio creativo independiente dedicado al contenido audiovisual y a la narrativa visual. Creamos contenido cinematográfico para marcas y negocios, desde el primer concepto hasta el montaje final.",
+    body2:
+      "Detrás de cada proyecto están Erica Santos, en la dirección creativa, y Ramón Fernández, en la producción audiovisual y la animación. Cuidamos la atmósfera, el ritmo y cada detalle para que haya un antes y un después en cómo se percibe tu negocio.",
+    rows: [
+      { name: "Marcas y campañas", tags: "Producto · Moda · Publicidad" },
+      { name: "Contenido para redes", tags: "Instagram · TikTok · YouTube" },
+      { name: "Piezas de marca", tags: "Web · Lanzamientos · Presentaciones" },
+      { name: "Animación", tags: "Personajes de marca" },
+    ],
+  },
+  proceso: {
+    kicker: "Cómo trabajamos",
+    lead: "Cada pieza pasa por el mismo cuidado: idea, guion, dirección de arte y edición final.",
+    body: "Cada proyecto empieza con una conversación y tiene su propio plazo y su propia dinámica.",
+  },
+  equipo: {
+    kicker: "Equipo",
+    members: [
+      { name: "Erica Santos", role: "Dirección creativa" },
+      { name: "Ramón Fernández", role: "Producción audiovisual / Animación" },
+    ],
+  },
+  contacto: {
+    kicker: "Contacto",
+    title: "Creemos algo que merezca ser visto.",
+    body: "Cuéntanos qué tienes en mente, dónde se va a publicar y para cuándo lo necesitas. Prepararemos una propuesta a la medida de tu proyecto.",
+    email: "Correo",
+    whatsapp: "WhatsApp",
+    booking: "Reservar una llamada",
+  },
+  footer: {
+    rights: "© 2026 Studio Eleven Cinematic",
+    tagline: "Atmósfera · Movimiento · Narrativa visual",
+    logoAlt: "Studio Eleven Cinematic",
+  },
 };
 
 export type Dictionary = typeof es;
