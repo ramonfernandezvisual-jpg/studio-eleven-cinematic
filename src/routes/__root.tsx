@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
-  Link,
   createRootRouteWithContext,
   useRouter,
   HeadContent,
@@ -11,26 +10,16 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { SiteNav } from "@/components/SiteNav";
-import { SiteFooter } from "@/components/SiteFooter";
 
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-semibold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Página no encontrada</h2>
-        <p className="mt-2 text-sm text-secondary-text">
-          La página que buscas no existe o se ha movido.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center border-b border-hairline pb-1 text-sm text-foreground transition-colors hover:border-accent hover:text-accent"
-          >
-            Volver al inicio
-          </Link>
-        </div>
+        <p className="mt-4 text-sm text-foreground/70">La página que buscas no existe.</p>
+        <a href="/" className="mt-6 inline-block text-sm underline">
+          Volver al inicio
+        </a>
       </div>
     </div>
   );
@@ -49,23 +38,17 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
           Esta página no se ha cargado
         </h1>
-        <p className="mt-2 text-sm text-secondary-text">
-          Algo ha fallado. Puedes volver a intentarlo o ir al inicio.
-        </p>
         <div className="mt-6 flex flex-wrap justify-center gap-4">
           <button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="border-b border-hairline pb-1 text-sm text-foreground transition-colors hover:border-accent hover:text-accent"
+            className="text-sm underline"
           >
             Reintentar
           </button>
-          <a
-            href="/"
-            className="border-b border-hairline pb-1 text-sm text-foreground transition-colors hover:border-accent hover:text-accent"
-          >
+          <a href="/" className="text-sm underline">
             Ir al inicio
           </a>
         </div>
@@ -82,11 +65,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Studio Eleven Cinematic" },
       {
         name: "description",
-        content: "Estudio de vídeo cinematográfico hecho con IA para marcas.",
+        content: "Estudio creativo de contenido cinematográfico para marcas y negocios.",
       },
-      { name: "theme-color", content: "#000000" },
+      { name: "theme-color", content: "#050505" },
       { property: "og:site_name", content: "Studio Eleven Cinematic" },
       { property: "og:locale", content: "es_ES" },
+      { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
@@ -120,12 +104,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SiteNav />
-      <main>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-      </main>
-      <SiteFooter />
+      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      <Outlet />
     </QueryClientProvider>
   );
 }
