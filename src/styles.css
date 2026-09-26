@@ -102,7 +102,19 @@
   }
 
   .se-nav {
-    gap: 20px !important;
+    gap: 18px !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+    white-space: nowrap;
+  }
+
+  .se-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .se-brand {
+    font-size: 11px !important;
+    white-space: nowrap;
   }
 }
 

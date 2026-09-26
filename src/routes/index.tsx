@@ -131,6 +131,7 @@ function Home() {
         >
           <a
             href="#inicio"
+            className="se-brand"
             style={{
               fontFamily: SERIF,
               fontSize: "13px",
