@@ -15,5 +15,5 @@ export type SectorId = (typeof SECTORES)[number]["id"];
 
 export function ytId(url: string): string {
   const m = (url || "").match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([A-Za-z0-9_-]{11})/);
-  return m ? m[1] : "";
+  return m?.[1] ?? "";
 }
