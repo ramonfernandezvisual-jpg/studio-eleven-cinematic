@@ -1,10 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { VideoSlot } from "@/components/VideoSlot";
-import { SECTORES } from "@/config/videos";
-import { bookingHref, emailHref, site, whatsappHref } from "@/config/site";
-import { locales, t } from "@/i18n";
 import logo from "@/assets/logo-studio-eleven-transparente.png";
+import { t } from "@/i18n";
+import { SECTORES, ytId, type SectorId } from "@/config/videos";
+import { site } from "@/config/site";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -14,398 +13,137 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: t.meta.title },
       { property: "og:description", content: t.meta.description },
       { property: "og:type", content: "website" },
+      // DOMINIO: sustituir por el dominio definitivo
+      { property: "og:image", content: `${site.dominio}/og-image.png` },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Home,
+  component: Index,
 });
 
-const SERIF = "Georgia, 'Times New Roman', serif";
-const KICKER: React.CSSProperties = {
-  fontSize: "10px",
-  letterSpacing: "0.3em",
-  textTransform: "uppercase",
-  color: "#8d8982",
-};
-const HAIRLINE = "1px solid rgba(255, 255, 255, 0.11)";
-const WRAP: React.CSSProperties = {
-  width: "90%",
-  maxWidth: "1296px",
-  margin: "0 auto",
-  display: "flex",
-  flexDirection: "column",
-};
-const H2: React.CSSProperties = {
-  margin: 0,
-  fontFamily: SERIF,
-  fontSize: "44px",
-  fontWeight: 400,
-  lineHeight: 1.1,
-  letterSpacing: "-0.015em",
-};
+const STARTS = [18.0, 20.6, 23.1, 25.7, 28.3, 30.9, 33.4, 36.0, 38.6, 41.1, 43.7, 46.3, 48.9, 51.4];
+const ENDS = [26.6, 29.1, 31.7, 34.3, 36.9, 39.4, 42.0, 44.6, 47.1, 49.7, 52.3, 54.9, 57.4, 60.0];
 
-function HeroLogo() {
-  /* Marcador LOGO_ANIMADO: cuando exista el vídeo, sustituye a la imagen
-     en el mismo sitio y al mismo tamaño. */
-  if (site.logoAnimado) {
-    return (
-      <video
-        src={site.logoAnimado}
-        className="se-hero-logo"
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-label={t.hero.logoAlt}
-        style={{ display: "block" }}
-      />
-    );
-  }
+function PlayIcon() {
   return (
-    <img
-      src={logo}
-      alt={t.hero.logoAlt}
-      className="se-hero-logo"
-      style={{ display: "block" }}
-    />
+    <svg width="14" height="16" viewBox="0 0 14 16" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
+      <path d="M2 1.5 L12.5 8 L2 14.5 Z"></path>
+    </svg>
   );
 }
 
-function Home() {
-  const [active, setActive] = useState(SECTORES[0]!.id);
-  const sector = SECTORES.find((s) => s.id === active) ?? SECTORES[0]!;
+function Player({ url, title, kind }: { url: string; title: string; kind: "h" | "v" }) {
+  const [playing, setPlaying] = useState(false);
+  const id = ytId(url);
+  return (
+    <div className={`player ${kind}`}>
+      {!id ? (
+        <div className="ph">
+          <span className="ph-title">{title}</span>
+          <span className="label">{t.sectores.proximamente}</span>
+        </div>
+      ) : playing ? (
+        <iframe
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowFullScreen
+          title={title}
+          src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1`}
+        />
+      ) : (
+        <>
+          <img className="thumb" alt={title} loading="lazy" src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} />
+          <button className="play" type="button" aria-label={`${t.sectores.reproducir} ${title}`} onClick={() => setPlaying(true)}>
+            <PlayIcon />
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
+function Index() {
+  const [active, setActive] = useState<SectorId>(SECTORES[0].id);
+  const s = SECTORES.find((x) => x.id === active) ?? SECTORES[0];
+  const txt = t.sectorList[s.id];
+  const words = t.estudio.title.split(" ");
 
   return (
-    <div
-      style={{
-        width: "100%",
-        background: "#050505",
-        color: "#f2efe8",
-        fontFamily: "Arial, Helvetica, sans-serif",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {/* ============ PORTADA ============ */}
-      <section
-        id="inicio"
-        aria-label={t.hero.aria}
-        style={{
-          position: "relative",
-          height: "760px",
-          overflow: "hidden",
-          background: "#050505",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            paddingBottom: "70px",
-            boxSizing: "border-box",
-          }}
-        >
-          <HeroLogo />
+    <>
+      <section id="inicio" className="hero" aria-label={t.hero.aria}>
+        <div className="hero-logo">
+          {/* LOGO_ANIMADO: el vídeo del logo animado sustituirá a esta imagen, en el mismo sitio y al mismo tamaño */}
+          {site.logoAnimado ? (
+            <video src={site.logoAnimado} autoPlay muted loop playsInline aria-label={t.brand} style={{ width: 280, height: 280, display: "block" }} />
+          ) : (
+            <img src={logo} alt={t.brand} />
+          )}
         </div>
-        <header
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "76px",
-            boxSizing: "border-box",
-            padding: "0 5%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            background: "rgba(5, 5, 5, 0.58)",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-          }}
-        >
-          <a
-            href="#inicio"
-            className="se-brand"
-            style={{
-              fontFamily: SERIF,
-              fontSize: "13px",
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-            }}
-          >
-            {t.nav.brand}
-          </a>
-          <nav
-            aria-label={t.nav.mainNav}
-            className="se-nav"
-            style={{
-              display: "flex",
-              gap: "34px",
-              fontSize: "10px",
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-            }}
-          >
+        <header className="header">
+          <a href="#inicio" className="brand">{t.brand}</a>
+          <nav className="nav" aria-label={t.nav.aria}>
             <a href="#inicio">{t.nav.inicio}</a>
             <a href="#sectores">{t.nav.proyectos}</a>
             <a href="#estudio">{t.nav.estudio}</a>
             <a href="#contacto">{t.nav.contacto}</a>
-            {/* Selector de idioma: preparado, oculto hasta que exista /en */}
-            {locales.length > 1 && <span>ES / EN</span>}
           </nav>
         </header>
-        <div
-          style={{
-            position: "absolute",
-            left: "5%",
-            right: "5%",
-            bottom: "48px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            gap: "40px",
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: "14px", maxWidth: "620px" }}>
-            <span style={{ ...KICKER, color: "#c9c4ba" }}>{t.hero.kicker}</span>
-            <h1
-              className="se-hero-title"
-              style={{
-                margin: 0,
-                fontFamily: SERIF,
-                fontSize: "40px",
-                fontWeight: 400,
-                lineHeight: 1.15,
-                letterSpacing: "-0.01em",
-              }}
-            >
-              {t.hero.title}
-            </h1>
-            <div
-              style={{
-                marginTop: "10px",
-                display: "flex",
-                gap: "28px",
-                fontSize: "10px",
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-              }}
-            >
-              <a
-                href="#sectores"
-                style={{ paddingBottom: "6px", borderBottom: "1px solid rgba(242, 239, 232, 0.6)" }}
-              >
-                {t.hero.ctaProjects}
-              </a>
-              <a
-                href="#contacto"
-                style={{ paddingBottom: "6px", borderBottom: "1px solid rgba(242, 239, 232, 0.25)" }}
-              >
-                {t.hero.ctaContact}
-              </a>
-            </div>
+        <div className="hero-text">
+          <h1 className="h1">{t.hero.title}</h1>
+          <div className="actions">
+            <a className="btn" href="#contacto">{t.hero.cta}</a>
+            <a className="link" href="#sectores">{t.hero.link}<span className="arr">›</span></a>
           </div>
         </div>
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            left: "50%",
-            bottom: 0,
-            width: "1px",
-            height: "56px",
-            marginLeft: "-0.5px",
-            overflow: "hidden",
-            background: "rgba(242, 239, 232, 0.18)",
-          }}
-        >
-          <div className="se-cuedot" style={{ width: "1px", height: "56px", background: "#f2efe8" }} />
-        </div>
+        <div className="cue" aria-hidden="true"><div></div></div>
       </section>
 
-      {/* ============ SECTORES ============ */}
-      <section id="sectores" style={{ padding: "110px 0", borderTop: HAIRLINE }}>
-        <div style={WRAP}>
-          <div
-            className="se-split"
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "40px" }}
-          >
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-              <span style={KICKER}>{t.sectores.kicker}</span>
-              <h2 style={H2}>{t.sectores.title}</h2>
+      <section id="sectores" className="sec">
+        <div className="wrap">
+          <div className="sec-head reveal">
+            <div className="stack">
+              <span className="label">{t.sectores.label}</span>
+              <h2 className="h2">{t.sectores.title}</h2>
             </div>
-            <p
-              style={{
-                margin: 0,
-                maxWidth: "440px",
-                fontSize: "15px",
-                lineHeight: 1.75,
-                color: "#8d8982",
-              }}
-            >
-              {t.sectores.intro}
-            </p>
+            <p className="muted" style={{ maxWidth: 440 }}>{t.sectores.text}</p>
           </div>
-
-          <div
-            role="tablist"
-            aria-label={t.sectores.tabsAria}
-            className="se-tabs"
-            style={{
-              marginTop: "44px",
-              display: "flex",
-              gap: "30px",
-              flexWrap: "wrap",
-              borderBottom: HAIRLINE,
-            }}
-          >
-            {SECTORES.map((s) => {
-              const on = s.id === sector.id;
-              return (
-                <button
-                  key={s.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={on}
-                  onClick={() => setActive(s.id)}
-                  style={{
-                    background: "transparent",
-                    border: 0,
-                    borderBottom: `1px solid ${on ? "#f2efe8" : "transparent"}`,
-                    marginBottom: "-1px",
-                    padding: "0 0 14px",
-                    fontFamily: "Arial, Helvetica, sans-serif",
-                    fontSize: "10px",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    cursor: "pointer",
-                    color: on ? "#f2efe8" : "#8d8982",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {s.name}
-                </button>
-              );
-            })}
+          <div id="se-tabs" className="tabs" role="tablist" aria-label={t.sectores.tabsAria}>
+            {SECTORES.map((x) => (
+              <button key={x.id} className="tab" type="button" role="tab" data-id={x.id} aria-selected={x.id === s.id ? "true" : "false"} onClick={() => setActive(x.id)}>
+                {t.sectorList[x.id].name}
+              </button>
+            ))}
           </div>
-
-          <div
-            className="se-media-grid"
-            style={{
-              marginTop: "36px",
-              display: "grid",
-              gridTemplateColumns: "minmax(0, 3.16fr) minmax(0, 1fr)",
-              gap: "24px",
-              alignItems: "start",
-            }}
-          >
-            <VideoSlot
-              code={sector.h}
-              title={sector.htitle}
-              youtube={sector.hYoutube}
-              format="horizontal"
-            />
-            <VideoSlot
-              code={sector.v}
-              title={sector.vtitle}
-              youtube={sector.vYoutube}
-              format="vertical"
-            />
+          <div className="players zoom">
+            <Player key={`${s.id}-h`} url={s.yt} title={txt.htitle} kind="h" />
+            <Player key={`${s.id}-v`} url={s.ytv} title={txt.vtitle} kind="v" />
           </div>
-
-          <div
-            className="se-split"
-            style={{
-              marginTop: "22px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              gap: "40px",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "baseline", gap: "28px" }}>
-              <strong style={{ fontFamily: SERIF, fontSize: "26px", fontWeight: 400 }}>
-                {sector.name}
-              </strong>
-              <span style={{ fontSize: "15px", lineHeight: 1.6, color: "#8d8982" }}>
-                {sector.text}
-              </span>
-            </div>
-            <span
-              className="se-formats"
-              style={{
-                fontSize: "9px",
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: "#8d8982",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {t.sectores.formats}
-            </span>
+          <div className="meta reveal">
+            <span id="se-name" className="sub">{txt.name}</span>
+            <span id="se-text" className="muted">{txt.text}</span>
           </div>
         </div>
       </section>
 
-      {/* ============ ESTUDIO ============ */}
-      <section id="estudio" style={{ padding: "110px 0", borderTop: HAIRLINE }}>
-        <div style={WRAP}>
-          <span style={KICKER}>{t.estudio.kicker}</span>
-          <div
-            className="se-estudio-grid"
-            style={{
-              marginTop: "44px",
-              display: "grid",
-              gridTemplateColumns: "0.95fr 1.05fr",
-              gap: "110px",
-              alignItems: "start",
-            }}
-          >
-            <p
-              className="se-lead"
-              style={{ margin: 0, fontFamily: SERIF, fontSize: "34px", lineHeight: 1.2 }}
-            >
-              {t.estudio.lead}
-            </p>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <p style={{ margin: 0, fontSize: "15px", lineHeight: 1.75, color: "#8d8982" }}>
-                {t.estudio.body1}
-              </p>
-              <p style={{ margin: "20px 0 0", fontSize: "15px", lineHeight: 1.75, color: "#8d8982" }}>
-                {t.estudio.body2}
-              </p>
-              <div style={{ marginTop: "34px", display: "flex", flexDirection: "column" }}>
-                {t.estudio.rows.map((r) => (
-                  <div
-                    key={r.name}
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "baseline",
-                      gap: "24px",
-                      padding: "15px 0",
-                      borderBottom: HAIRLINE,
-                    }}
-                  >
-                    <span style={{ fontFamily: SERIF, fontSize: "20px" }}>{r.name}</span>
-                    <span
-                      style={{
-                        fontSize: "9px",
-                        letterSpacing: "0.14em",
-                        textTransform: "uppercase",
-                        color: "#8d8982",
-                        textAlign: "right",
-                      }}
-                    >
-                      {r.tags}
-                    </span>
-                  </div>
+      <section id="estudio" className="sec">
+        <div className="wrap">
+          <span className="label reveal">{t.estudio.label}</span>
+          <div className="two">
+            <h2 className="h2 lit" aria-label={t.estudio.title}>
+              {words.map((w, i) => (
+                <span key={i}>
+                  <span className="w" style={{ animationRange: `cover ${(STARTS[i] ?? 0).toFixed(1)}% cover ${(ENDS[i] ?? 60).toFixed(1)}%` } as React.CSSProperties}>{w}</span>
+                  {i < words.length - 1 ? " " : ""}
+                </span>
+              ))}
+            </h2>
+            <div className="col reveal">
+              <p className="muted">{t.estudio.p1}</p>
+              <p className="muted">{t.estudio.p2}</p>
+              <div className="rows">
+                {t.estudio.rows.map(([a, b]) => (
+                  <div className="row" key={a}><span className="lead">{a}</span><span className="detail">{b}</span></div>
                 ))}
               </div>
             </div>
@@ -413,163 +151,45 @@ function Home() {
         </div>
       </section>
 
-      {/* ============ PROCESO ============ */}
-      <section id="proceso" aria-label={t.proceso.kicker} style={{ padding: "110px 0", borderTop: HAIRLINE }}>
-        <div style={WRAP}>
-          <span style={KICKER}>{t.proceso.kicker}</span>
-          <p
-            className="se-lead"
-            style={{
-              margin: "44px 0 0",
-              maxWidth: "900px",
-              fontFamily: SERIF,
-              fontSize: "34px",
-              lineHeight: 1.25,
-            }}
-          >
-            {t.proceso.lead}
-          </p>
-          <p
-            style={{
-              margin: "22px 0 0",
-              maxWidth: "620px",
-              fontSize: "15px",
-              lineHeight: 1.75,
-              color: "#8d8982",
-            }}
-          >
-            {t.proceso.body}
-          </p>
+      <section id="proceso" className="sec cont" aria-label={t.proceso.aria}>
+        <div className="wrap">
+          <span className="label reveal">{t.proceso.label}</span>
+          <h2 className="h2 reveal" style={{ marginTop: 48, maxWidth: 900 }}>{t.proceso.title}</h2>
+          <p className="muted reveal" style={{ marginTop: 24, maxWidth: 620 }}>{t.proceso.text}</p>
         </div>
       </section>
 
-      {/* ============ EQUIPO ============ */}
-      <section id="equipo" aria-label={t.equipo.kicker} style={{ padding: "110px 0", borderTop: HAIRLINE }}>
-        <div style={WRAP}>
-          <span style={KICKER}>{t.equipo.kicker}</span>
-          <div
-            className="se-equipo-grid"
-            style={{
-              marginTop: "48px",
-              display: "grid",
-              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-              gap: "56px",
-              alignItems: "end",
-            }}
-          >
-            {t.equipo.members.map((m, i) => (
-              <div
-                key={m.name}
-                className={i === 1 ? "se-equipo-second" : undefined}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "16px",
-                  ...(i === 1
-                    ? { borderLeft: HAIRLINE, paddingLeft: "56px" }
-                    : {}),
-                }}
-              >
-                <span
-                  className="se-equipo-name"
-                  style={{
-                    fontFamily: SERIF,
-                    fontSize: "44px",
-                    fontWeight: 400,
-                    lineHeight: 1.05,
-                    letterSpacing: "-0.015em",
-                  }}
-                >
-                  {m.name}
-                </span>
-                <span
-                  style={{
-                    fontSize: "10px",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    color: "#8d8982",
-                  }}
-                >
-                  {m.role}
-                </span>
-              </div>
+      <section id="equipo" className="sec" aria-label={t.equipo.aria}>
+        <div className="wrap">
+          <span className="label reveal">{t.equipo.label}</span>
+          <div className="team">
+            {t.equipo.people.map((p) => (
+              <div className="person reveal" key={p.name}><span className="name">{p.name}</span><span className="label">{p.role}</span></div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ============ CONTACTO ============ */}
-      <section
-        id="contacto"
-        style={{ padding: "110px 0 56px", borderTop: HAIRLINE, textAlign: "center" }}
-      >
-        <div style={{ ...WRAP, alignItems: "center" }}>
-          <span style={KICKER}>{t.contacto.kicker}</span>
-          <h2 style={{ ...H2, margin: "22px 0 0" }}>{t.contacto.title}</h2>
-          <p
-            style={{
-              margin: "24px 0 0",
-              maxWidth: "600px",
-              fontSize: "15px",
-              lineHeight: 1.75,
-              color: "#8d8982",
-            }}
-          >
-            {t.contacto.body}
-          </p>
-          <div
-            className="se-contact-links"
-            style={{
-              marginTop: "34px",
-              display: "flex",
-              gap: "34px",
-              justifyContent: "center",
-              fontSize: "10px",
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-            }}
-          >
-            <a
-              href={emailHref()}
-              style={{ paddingBottom: "6px", borderBottom: "1px solid rgba(242, 239, 232, 0.5)" }}
-            >
-              {t.contacto.email}
-            </a>
-            <a
-              href={whatsappHref()}
-              style={{ paddingBottom: "6px", borderBottom: "1px solid rgba(242, 239, 232, 0.5)" }}
-            >
-              {t.contacto.whatsapp}
-            </a>
-            <a
-              href={bookingHref()}
-              style={{ paddingBottom: "6px", borderBottom: "1px solid rgba(242, 239, 232, 0.5)" }}
-            >
-              {t.contacto.booking}
-            </a>
+      <section id="contacto" className="sec contact" style={{ paddingBottom: 48 }}>
+        <div className="wrap">
+          <span className="label reveal">{t.contacto.label}</span>
+          <h2 className="h2 reveal" style={{ marginTop: 24 }}>{t.contacto.title}</h2>
+          <p className="muted reveal" style={{ marginTop: 24, maxWidth: 600 }}>{t.contacto.text}</p>
+          <div className="actions reveal" style={{ marginTop: 32, justifyContent: "center" }}>
+            {/* RESERVA: sustituir por el enlace de reservas real */}
+            <a className="btn" href={site.reserva}>{t.contacto.reserva}</a>
+            <a className="link" href={site.whatsapp}>{t.contacto.whatsapp}</a>
           </div>
-          <footer
-            className="se-footer"
-            style={{
-              marginTop: "96px",
-              width: "100%",
-              paddingTop: "24px",
-              borderTop: HAIRLINE,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              color: "#706c66",
-              fontSize: "9px",
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-            }}
-          >
-            <span>{t.footer.rights}</span>
-            <img src={logo} alt={t.footer.logoAlt} style={{ width: "88px", height: "88px", display: "block" }} />
+          <p className="muted reveal" style={{ marginTop: 24, fontSize: 15 }}>
+            {t.contacto.escribenos} <a href={`mailto:${site.email}`} className="mail" style={{ userSelect: "all" }}>{site.email}</a>
+          </p>
+          <footer className="footer">
+            <span>{t.footer.copy}</span>
+            <img src={logo} alt={t.brand} />
             <span>{t.footer.tagline}</span>
           </footer>
         </div>
       </section>
-    </div>
+    </>
   );
 }

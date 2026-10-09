@@ -64,22 +64,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Studio Eleven Cinematic" },
-      {
-        name: "description",
-        content: "Estudio creativo de contenido cinematográfico para marcas y negocios.",
-      },
-      { name: "theme-color", content: "#050505" },
-      { property: "og:site_name", content: "Studio Eleven Cinematic" },
-      { property: "og:locale", content: "es_ES" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32.png" },
-      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon-180.png" },
+      { rel: "icon", href: "/logo-studio-eleven-transparente.png" },
     ],
   }),
   shellComponent: RootShell,
