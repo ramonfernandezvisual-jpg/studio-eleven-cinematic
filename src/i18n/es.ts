@@ -8,7 +8,9 @@ export const es = {
   nav: { aria: "Navegación principal", inicio: "Inicio", proyectos: "Proyectos", estudio: "Estudio", contacto: "Contacto" },
   hero: {
     aria: "Portada",
-    title: "Contenido cinematográfico para la web y las redes de tu negocio.",
+    title1: "Hay negocios que se ven.",
+    title2: "Y negocios que se recuerdan.",
+    sub: "Contenido cinematográfico para marcas y negocios.",
     cta: "Hablemos",
     link: "Ver proyectos por sector",
   },
