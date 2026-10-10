@@ -90,7 +90,8 @@ function Index() {
           </nav>
         </header>
         <div className="hero-text">
-          <h1 className="h1">{t.hero.title}</h1>
+          <h1 className="h1"><span className="l">{t.hero.title1}</span> <span className="l">{t.hero.title2}</span></h1>
+          <p className="lead muted">{t.hero.sub}</p>
           <div className="actions">
             <a className="btn" href="#contacto">{t.hero.cta}</a>
             <a className="link" href="#sectores">{t.hero.link}<span className="arr">›</span></a>
