@@ -11,15 +11,22 @@ import { lazy, useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { LanguageProvider, useLanguage } from "@/i18n/language";
+import { Button } from "@/components/ui/button";
 
 function NotFoundComponent() {
+  return <LanguageProvider><NotFoundContent /></LanguageProvider>;
+}
+
+function NotFoundContent() {
+  const { t } = useLanguage();
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-semibold text-foreground">404</h1>
-        <p className="mt-4 text-sm text-foreground/70">La página que buscas no existe.</p>
+        <p className="mt-4 text-sm text-foreground/70">{t.errors.notFound}</p>
         <a href="/" className="mt-6 inline-block text-sm underline">
-          Volver al inicio
+          {t.errors.home}
         </a>
       </div>
     </div>
@@ -27,6 +34,11 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
+  return <LanguageProvider><ErrorContent error={error} reset={reset} /></LanguageProvider>;
+}
+
+function ErrorContent({ error, reset }: ErrorComponentProps) {
+  const { t } = useLanguage();
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -39,20 +51,20 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          Esta página no se ha cargado
+          {t.errors.failed}
         </h1>
         <div className="mt-6 flex flex-wrap justify-center gap-4">
-          <button
+          <Button variant="link"
             onClick={() => {
               router.invalidate();
               reset();
             }}
             className="text-sm underline"
           >
-            Reintentar
-          </button>
+            {t.errors.retry}
+          </Button>
           <a href="/" className="text-sm underline">
-            Ir al inicio
+            {t.errors.home}
           </a>
         </div>
       </div>
@@ -97,7 +109,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <LanguageProvider><Outlet /></LanguageProvider>
     </QueryClientProvider>
   );
 }
