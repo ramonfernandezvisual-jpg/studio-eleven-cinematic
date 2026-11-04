@@ -1,196 +1,116 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowDown, ArrowUpRight, Instagram, Play, Youtube } from "lucide-react";
 import logo from "@/assets/logo-studio-eleven-transparente.png";
-import { t } from "@/i18n";
-import { SECTORES, ytId, type SectorId } from "@/config/videos";
+import { Button } from "@/components/ui/button";
+import { VideoViewer, type VideoSelection } from "@/components/VideoViewer";
+import { projects, TRAILER_FULL_URL, youtubeId } from "@/data/projects";
+import { useLanguage } from "@/i18n/language";
+import { translations } from "@/i18n/translations";
 import { site } from "@/config/site";
-
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: t.meta.title },
-      { name: "description", content: t.meta.description },
-      { property: "og:title", content: t.meta.title },
-      { property: "og:description", content: t.meta.description },
-      { property: "og:type", content: "website" },
-      // DOMINIO: sustituir por el dominio definitivo
-      { property: "og:image", content: `${site.dominio}/og-image.png` },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Index,
+  head: () => ({ meta: [
+    { title: translations.es.meta.title },
+    { name: "description", content: translations.es.meta.description },
+    { property: "og:title", content: translations.es.meta.title },
+    { property: "og:description", content: translations.es.meta.description },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }), component: Index,
 });
-
-const STARTS = [18.0, 20.6, 23.1, 25.7, 28.3, 30.9, 33.4, 36.0, 38.6, 41.1, 43.7, 46.3, 48.9, 51.4];
-const ENDS = [26.6, 29.1, 31.7, 34.3, 36.9, 39.4, 42.0, 44.6, 47.1, 49.7, 52.3, 54.9, 57.4, 60.0];
-
-function PlayIcon() {
-  return (
-    <svg width="14" height="16" viewBox="0 0 14 16" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
-      <path d="M2 1.5 L12.5 8 L2 14.5 Z"></path>
-    </svg>
-  );
+const trailerFiles = import.meta.glob("/public/*.mp4");
+const hasTrailer = "/public/trailer.mp4" in trailerFiles;
+function SocialLinks() {
+  const { t } = useLanguage();
+  return <div className="social-links">
+    <Button asChild variant="ghost" size="icon"><a href="https://www.youtube.com/@ElevenStudioCinematic" target="_blank" rel="noopener noreferrer" aria-label={t.social.youtube} title={t.social.youtube}><Youtube /></a></Button>
+    <Button asChild variant="ghost" size="icon"><a href="https://www.instagram.com/studioelevencinematic" target="_blank" rel="noopener noreferrer" aria-label={t.social.instagram} title={t.social.instagram}><Instagram /></a></Button>
+  </div>;
 }
-
-function Player({ url, title, kind }: { url: string; title: string; kind: "h" | "v" }) {
-  const [playing, setPlaying] = useState(false);
-  const id = ytId(url);
-  return (
-    <div className={`player ${kind}`}>
-      {!id ? (
-        <div className="ph">
-          <span className="ph-title">{title}</span>
-          <span className="label">{t.sectores.proximamente}</span>
-        </div>
-      ) : playing ? (
-        <iframe
-          allow="autoplay; encrypted-media; picture-in-picture"
-          allowFullScreen
-          title={title}
-          src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1`}
-        />
-      ) : (
-        <>
-          <img className="thumb" alt={title} loading="lazy" src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} />
-          <button className="play" type="button" aria-label={`${t.sectores.reproducir} ${title}`} onClick={() => setPlaying(true)}>
-            <PlayIcon />
-          </button>
-        </>
-      )}
-    </div>
-  );
-}
-
 function Index() {
-  const [active, setActive] = useState<SectorId>(SECTORES[0].id);
-  const s = SECTORES.find((x) => x.id === active) ?? SECTORES[0];
-  const txt = t.sectorList[s.id];
-  const words = t.estudio.title.split(" ");
-
-  return (
-    <>
-      <section id="inicio" className="hero" aria-label={t.hero.aria}>
-        <div className="hero-logo">
-          {/* LOGO_ANIMADO: el vídeo del logo animado sustituirá a esta imagen, en el mismo sitio y al mismo tamaño */}
-          {site.logoAnimado ? (
-            <video src={site.logoAnimado} autoPlay muted loop playsInline aria-label={t.brand} style={{ width: 280, height: 280, display: "block" }} />
-          ) : (
-            <img src={logo} alt={t.brand} />
-          )}
+  const { t, locale, changeLocale } = useLanguage();
+  const [scrolled, setScrolled] = useState(false);
+  const [video, setVideo] = useState<VideoSelection | null>(null);
+  const hero = useRef<HTMLElement>(null);
+  const backgroundVideo = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    document.title = t.meta.title;
+    for (const [selector, value] of [["meta[name='description']", t.meta.description], ["meta[property='og:title']", t.meta.title], ["meta[property='og:description']", t.meta.description]]) {
+      document.querySelector(selector)?.setAttribute("content", value);
+    }
+  }, [t]);
+  useEffect(() => {
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      setScrolled(y > 24);
+      hero.current?.style.setProperty("--parallax", motion.matches ? "0px" : `${Math.min(y * 0.1, 80)}px`);
+      hero.current?.style.setProperty("--scroll-opacity", motion.matches ? "1" : String(Math.max(0, 1 - y / 180)));
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const onMotion = () => {
+      if (motion.matches) backgroundVideo.current?.pause();
+      else backgroundVideo.current?.play().catch(() => {});
+      update();
+    };
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+      if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
+    }), { threshold: 0.08 });
+    document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+    update(); onMotion();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    motion.addEventListener("change", onMotion);
+    return () => { observer.disconnect(); window.removeEventListener("scroll", onScroll); motion.removeEventListener("change", onMotion); cancelAnimationFrame(frame); };
+  }, []);
+  return <>
+    <header className={`header${scrolled ? " scrolled" : ""}`}>
+      <a href="#inicio" className="brand">{t.brand}</a>
+      <nav className="nav" aria-label={t.nav.aria}>
+        <div className="nav-pages"><a href="#inicio">{t.nav.inicio}</a><a href="#proyectos">{t.nav.proyectos}</a><a href="#estudio">{t.nav.estudio}</a><a href="#contacto">{t.nav.contacto}</a></div>
+        <div className="language-switch" role="group" aria-label={t.nav.language}>
+          <Button variant="ghost" size="sm" aria-label={t.nav.es} aria-pressed={locale === "es"} onClick={() => changeLocale("es")}>ES</Button><span aria-hidden="true">|</span><Button variant="ghost" size="sm" aria-label={t.nav.en} aria-pressed={locale === "en"} onClick={() => changeLocale("en")}>EN</Button>
         </div>
-        <header className="header">
-          <a href="#inicio" className="brand">{t.brand}</a>
-          <nav className="nav" aria-label={t.nav.aria}>
-            <a href="#inicio">{t.nav.inicio}</a>
-            <a href="#sectores">{t.nav.proyectos}</a>
-            <a href="#estudio">{t.nav.estudio}</a>
-            <a href="#contacto">{t.nav.contacto}</a>
-          </nav>
-        </header>
+        <Button asChild className="btn nav-cta"><a href="#contacto">{t.hero.cta}</a></Button>
+      </nav>
+    </header>
+    <main>
+      <section ref={hero} id="inicio" className="hero" aria-label={t.hero.aria}>
+        <div className="hero-background">{hasTrailer && <video ref={backgroundVideo} src="/trailer.mp4" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" onError={(event) => { event.currentTarget.hidden = true; }} />}</div>
+        <div className="hero-shade" />
         <div className="hero-text">
-          <h1 className="h1"><span className="l">{t.hero.title1}</span> <span className="l">{t.hero.title2}</span></h1>
-          <p className="lead muted">{t.hero.sub}</p>
-          <div className="actions">
-            <a className="btn" href="#contacto">{t.hero.cta}</a>
-            <a className="link" href="#sectores">{t.hero.link}<span className="arr">›</span></a>
-          </div>
+          <h1 className="h1 hero-enter">{t.hero.title}</h1>
+          <p className="lead muted hero-enter hero-delay-1">{t.hero.sub}</p>
+          <div className="actions hero-enter hero-delay-2"><Button asChild className="btn"><a href="#contacto">{t.hero.cta}</a></Button><Button asChild variant="link" className="link"><a href="#proyectos">{t.hero.projects}<ArrowUpRight /></a></Button></div>
+          {youtubeId(TRAILER_FULL_URL) && <Button variant="ghost" className="trailer-link hero-enter hero-delay-2" onClick={() => setVideo({ title: t.hero.trailer, videoUrl: TRAILER_FULL_URL, format: "horizontal" })}><Play />{t.hero.trailer}</Button>}
         </div>
-        <div className="cue" aria-hidden="true"><div></div></div>
+        <a href="#proyectos" className="scroll-cue"><span>{t.hero.scroll}</span><ArrowDown aria-hidden="true" /></a>
       </section>
-
-      <section id="sectores" className="sec">
+      <section id="proyectos" className="sec projects-section">
         <div className="wrap">
-          <div className="sec-head reveal">
-            <div className="stack">
-              <span className="label">{t.sectores.label}</span>
-              <h2 className="h2">{t.sectores.title}</h2>
-            </div>
-            <p className="muted" style={{ maxWidth: 440 }}>{t.sectores.text}</p>
+          <div className="sec-head reveal"><h2 className="h2">{t.projects.title}</h2><p className="muted">{t.projects.sub}</p></div>
+          <div className="project-grid">
+            {projects.map((project) => {
+              const id = youtubeId(project.videoUrl);
+              const tag = project.tag[locale];
+              const image = project.poster || (id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : "");
+              const face = <>{image ? <img src={image} alt={project.title} loading="lazy" decoding="async" /> : <div className="project-placeholder"><span>{project.title}</span><span className="label">{tag}</span></div>}{id && <span className="project-play"><Play aria-hidden="true" /></span>}</>;
+              return <article key={project.id} className={`project ${project.format} reveal`}>
+                {id ? <Button variant="ghost" className="project-visual" aria-label={`${t.projects.play} ${project.title}`} onClick={() => setVideo(project)}>{face}</Button> : <div className="project-visual">{face}</div>}
+                <div className="project-caption"><h3>{project.title}</h3><p className="muted">{tag}</p></div>
+              </article>;
+            })}
           </div>
-          <div id="se-tabs" className="tabs" role="tablist" aria-label={t.sectores.tabsAria}>
-            {SECTORES.map((x) => (
-              <button key={x.id} className="tab" type="button" role="tab" data-id={x.id} aria-selected={x.id === s.id ? "true" : "false"} onClick={() => setActive(x.id)}>
-                {t.sectorList[x.id].name}
-              </button>
-            ))}
-          </div>
-          <div className="players zoom">
-            <Player key={`${s.id}-h`} url={s.yt} title={txt.htitle} kind="h" />
-            <Player key={`${s.id}-v`} url={s.ytv} title={txt.vtitle} kind="v" />
-          </div>
-          <div className="meta reveal">
-            <span id="se-name" className="sub">{txt.name}</span>
-            <span id="se-text" className="muted">{txt.text}</span>
-          </div>
+          <div className="gallery-action reveal"><Button asChild className="btn"><a href="#contacto">{t.hero.cta}</a></Button></div>
         </div>
       </section>
-
-      <section id="estudio" className="sec">
-        <div className="wrap">
-          <span className="label reveal">{t.estudio.label}</span>
-          <div className="two">
-            <h2 className="h2 lit" aria-label={t.estudio.title}>
-              {words.map((w, i) => (
-                <span key={i}>
-                  <span className="w" style={{ animationRange: `cover ${(STARTS[i] ?? 0).toFixed(1)}% cover ${(ENDS[i] ?? 60).toFixed(1)}%` } as React.CSSProperties}>{w}</span>
-                  {i < words.length - 1 ? " " : ""}
-                </span>
-              ))}
-            </h2>
-            <div className="col reveal">
-              <p className="muted">{t.estudio.p1}</p>
-              <p className="muted">{t.estudio.p2}</p>
-              <div className="rows">
-                {t.estudio.rows.map(([a, b]) => (
-                  <div className="row" key={a}><span className="lead">{a}</span><span className="detail">{b}</span></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="proceso" className="sec cont" aria-label={t.proceso.aria}>
-        <div className="wrap">
-          <span className="label reveal">{t.proceso.label}</span>
-          <h2 className="h2 reveal" style={{ marginTop: 48, maxWidth: 900 }}>{t.proceso.title}</h2>
-          <p className="muted reveal" style={{ marginTop: 24, maxWidth: 620 }}>{t.proceso.text}</p>
-        </div>
-      </section>
-
-      <section id="equipo" className="sec" aria-label={t.equipo.aria}>
-        <div className="wrap">
-          <span className="label reveal">{t.equipo.label}</span>
-          <div className="team">
-            {t.equipo.people.map((p) => (
-              <div className="person reveal" key={p.name}><span className="name">{p.name}</span><span className="label">{p.role}</span></div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="contacto" className="sec contact" style={{ paddingBottom: 48 }}>
-        <div className="wrap">
-          <span className="label reveal">{t.contacto.label}</span>
-          <h2 className="h2 reveal" style={{ marginTop: 24 }}>{t.contacto.title}</h2>
-          <p className="muted reveal" style={{ marginTop: 24, maxWidth: 600 }}>{t.contacto.text}</p>
-          <div className="actions reveal" style={{ marginTop: 32, justifyContent: "center" }}>
-            {/* RESERVA: sustituir por el enlace de reservas real */}
-            <a className="btn" href={site.reserva}>{t.contacto.reserva}</a>
-            <a className="link" href={site.whatsapp}>{t.contacto.whatsapp}</a>
-          </div>
-          <p className="muted reveal" style={{ marginTop: 24, fontSize: 15 }}>
-            {t.contacto.escribenos} <a href={`mailto:${site.email}`} className="mail" style={{ userSelect: "all" }}>{site.email}</a>
-          </p>
-          <footer className="footer">
-            <span>{t.footer.copy}</span>
-            <img src={logo} alt={t.brand} />
-            <span>{t.footer.tagline}</span>
-          </footer>
-        </div>
-      </section>
-    </>
-  );
+      <section id="estudio" className="sec"><div className="wrap reveal"><span className="label">{t.estudio.label}</span><div className="two"><h2 className="h2">{t.estudio.title}</h2><div className="col"><p className="muted">{t.estudio.p1}</p><p className="muted">{t.estudio.p2}</p><div className="rows">{t.estudio.services.map((service) => { const [title, ...description] = service.split(": "); return <div className="row" key={title}><span className="lead">{title}</span><span className="detail">{description.join(": ")}</span></div>; })}</div></div></div></div></section>
+      <section id="proceso" className="sec cont" aria-label={t.proceso.label}><div className="wrap reveal"><span className="label">{t.proceso.label}</span><h2 className="h2 process-title">{t.proceso.title}</h2><p className="muted process-text">{t.proceso.text}</p></div></section>
+      <section id="equipo" className="sec" aria-label={t.equipo.label}><div className="wrap reveal"><span className="label">{t.equipo.label}</span><div className="team">{t.equipo.people.map((person) => <div className="person" key={person.name}><span className="name">{person.name}</span><span className="label">{person.role}</span></div>)}</div></div></section>
+      <section id="contacto" className="sec contact"><div className="wrap reveal"><span className="label">{t.contacto.label}</span><h2 className="h2 contact-question">{t.contacto.question}</h2><h3 className="contact-title">{t.contacto.title}</h3><p className="muted contact-text">{t.contacto.text}</p><div className="actions contact-actions"><Button asChild className="btn"><a href={site.reserva}>{t.contacto.reserva}</a></Button><Button asChild variant="link" className="link"><a href={site.whatsapp}>{t.contacto.whatsapp}<ArrowUpRight /></a></Button></div><p className="contact-email muted">{t.contacto.email} <a href={`mailto:${site.email}`} className="mail">{site.email}</a></p><SocialLinks /></div></section>
+    </main>
+    <footer className="footer wrap"><div className="footer-brand"><img src={logo} alt={t.brand} loading="lazy" /><span>{t.footer.copy}</span></div><SocialLinks /><span className="footer-tagline">{t.footer.tagline}</span></footer>
+    <VideoViewer video={video} onClose={() => setVideo(null)} />
+  </>;
 }
