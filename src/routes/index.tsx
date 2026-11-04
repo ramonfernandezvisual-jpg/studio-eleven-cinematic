@@ -35,7 +35,7 @@ function Index() {
   const backgroundVideo = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     document.title = t.meta.title;
-    for (const [selector, value] of [["meta[name='description']", t.meta.description], ["meta[property='og:title']", t.meta.title], ["meta[property='og:description']", t.meta.description]]) {
+    for (const [selector, value] of [["meta[name='description']", t.meta.description], ["meta[property='og:title']", t.meta.title], ["meta[property='og:description']", t.meta.description]] as const) {
       document.querySelector(selector)?.setAttribute("content", value);
     }
   }, [t]);
