@@ -12,7 +12,7 @@ export function VideoViewer({ video, onClose }: { video: VideoSelection | null; 
       <Dialog.Overlay className="viewer-overlay" />
       <Dialog.Content className={`viewer-content ${video?.format ?? "horizontal"}`} aria-describedby={undefined}>
         <Dialog.Title className="sr-only">{video?.title ?? t.projects.viewer}</Dialog.Title>
-        {id && <iframe title={video?.title ?? t.projects.viewer} src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1`} allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowFullScreen />}
+        {id && <iframe title={video?.title ?? t.projects.viewer} src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1&vq=hd1080`} allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowFullScreen />}
         <Dialog.Close asChild><Button variant="ghost" size="icon" className="viewer-close" aria-label={t.projects.close} title={t.projects.close}><X /></Button></Dialog.Close>
       </Dialog.Content>
     </Dialog.Portal>

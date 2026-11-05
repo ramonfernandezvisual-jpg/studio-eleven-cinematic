@@ -9,10 +9,10 @@ export interface Project {
 }
 export const TRAILER_FULL_URL = "";
 export const projects: Project[] = [
-  { id: "silence-guards", title: "THE SILENCE GUARDS", tag: { es: "Spot · Perfume", en: "Ad · Perfume" }, format: "vertical", videoUrl: "" },
+  { id: "silence-guards", title: "THE SILENCE GUARDS", tag: { es: "Spot · Perfume", en: "Ad · Perfume" }, format: "vertical", videoUrl: "https://youtube.com/shorts/AgrxLTd_xc4" },
   { id: "nico", title: "Nico y el monstruo del tejado", tag: { es: "Corto animado", en: "Animated short" }, format: "horizontal", videoUrl: "" },
   { id: "wes", title: "Wes", tag: { es: "Corto", en: "Short film" }, format: "horizontal", videoUrl: "" },
-  { id: "drugstore", title: "Drugstore", tag: { es: "Spot · Proyecto personal", en: "Ad · Personal project" }, format: "horizontal", videoUrl: "" },
+  { id: "drugstore", title: "Drugstore", tag: { es: "Spot · Proyecto personal", en: "Ad · Personal project" }, format: "horizontal", videoUrl: "https://youtu.be/TAa3UVsvlIM" },
   { id: "avatar-01", title: "Avatar 01", tag: { es: "Personaje", en: "Character" }, format: "vertical", videoUrl: "" },
   { id: "barcino", title: "Barcino Nº 29", tag: { es: "Spot · Perfume", en: "Ad · Perfume" }, format: "horizontal", videoUrl: "" },
   { id: "moda-arquitectura", title: "Moda y arquitectura", tag: { es: "Moda y arquitectura", en: "Fashion & architecture" }, format: "horizontal", videoUrl: "" },
