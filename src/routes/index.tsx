@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUpRight, Instagram, Play, Youtube } from "lucide-react";
-import logoAsset from "@/assets/logo-studio-eleven-sin-fondo.png.asset.json";
+import logoAsset from "@/assets/logo-studio-eleven-sin-fondo-brillante.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { VideoViewer, type VideoSelection } from "@/components/VideoViewer";
 import { projects, TRAILER_FULL_URL, youtubeId } from "@/data/projects";
