@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUpRight, Instagram, Play, Youtube } from "lucide-react";
-import logo from "@/assets/logo-studio-eleven-transparente.png";
+import logoAsset from "@/assets/logo-studio-eleven-sin-fondo.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { VideoViewer, type VideoSelection } from "@/components/VideoViewer";
 import { projects, TRAILER_FULL_URL, youtubeId } from "@/data/projects";
@@ -66,7 +66,7 @@ function Index() {
   }, []);
   return <>
     <header className={`header${scrolled ? " scrolled" : ""}`}>
-      <a href="#inicio" className="brand">{t.brand}</a>
+      <a href="#inicio" className="brand" aria-label={t.brand}><img src={logoAsset.url} alt={t.brand} width={640} height={640} /></a>
       <nav className="nav" aria-label={t.nav.aria}>
         <div className="nav-pages"><a href="#inicio">{t.nav.inicio}</a><a href="#proyectos">{t.nav.proyectos}</a><a href="#estudio">{t.nav.estudio}</a><a href="#contacto">{t.nav.contacto}</a></div>
         <div className="language-switch" role="group" aria-label={t.nav.language}>
@@ -110,7 +110,7 @@ function Index() {
       <section id="equipo" className="sec" aria-label={t.equipo.label}><div className="wrap reveal"><span className="label">{t.equipo.label}</span><div className="team">{t.equipo.people.map((person) => <div className="person" key={person.name}><span className="name">{person.name}</span><span className="label">{person.role}</span></div>)}</div></div></section>
       <section id="contacto" className="sec contact"><div className="wrap reveal"><span className="label">{t.contacto.label}</span><h2 className="h2 contact-question">{t.contacto.question}</h2><h3 className="contact-title">{t.contacto.title}</h3><p className="muted contact-text">{t.contacto.text}</p><div className="actions contact-actions"><Button asChild className="btn"><a href={site.reserva}>{t.contacto.reserva}</a></Button><Button asChild variant="link" className="link"><a href={site.whatsapp}>{t.contacto.whatsapp}<ArrowUpRight /></a></Button></div><p className="contact-email muted">{t.contacto.email} <a href={`mailto:${site.email}`} className="mail">{site.email}</a></p><SocialLinks /></div></section>
     </main>
-    <footer className="footer wrap"><div className="footer-brand"><img src={logo} alt={t.brand} loading="lazy" /><span>{t.footer.copy}</span></div><SocialLinks /><span className="footer-tagline">{t.footer.tagline}</span></footer>
+    <footer className="footer wrap"><div className="footer-brand"><span className="footer-name">{t.brand}</span><span>{t.footer.copy}</span></div><SocialLinks /><span className="footer-tagline">{t.footer.tagline}</span></footer>
     <VideoViewer video={video} onClose={() => setVideo(null)} />
   </>;
 }
