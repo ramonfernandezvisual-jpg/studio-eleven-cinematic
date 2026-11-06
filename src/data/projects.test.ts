@@ -14,8 +14,12 @@ describe("project configuration", () => {
   it("uses vertical format only for Silence Guards and Avatar", () => {
     expect(projects.filter(({ format }) => format === "vertical").map(({ id }) => id)).toEqual(["silence-guards", "avatar-01"]);
   });
-  it("has playable links only for Silence Guards and Drugstore", () => {
-    expect(projects.filter(({ videoUrl }) => videoUrl !== "").map(({ id }) => id)).toEqual(["silence-guards", "drugstore"]);
+  it("has playable links only for Silence Guards, Drugstore and Wes", () => {
+    expect(projects.filter(({ videoUrl }) => videoUrl !== "").map(({ id }) => id)).toEqual(["silence-guards", "drugstore", "wes"]);
+  });
+  it("gives the Wes short the requested YouTube link", () => {
+    expect(projects.find((p) => p.id === "wes")?.videoUrl).toBe("https://youtu.be/Z6_exORVQ-A");
+    expect(youtubeId("https://youtu.be/Z6_exORVQ-A")).toBe("Z6_exORVQ-A");
   });
   it("gives both playable projects a poster image", () => {
     for (const id of ["silence-guards", "drugstore"]) {
