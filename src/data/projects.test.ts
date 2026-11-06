@@ -27,6 +27,10 @@ describe("project configuration", () => {
       expect(project?.poster).toBeTruthy();
     }
   });
+  it("uses the requested names and types for Wes and Drugstore", () => {
+    expect(projects.find((p) => p.id === "wes")?.title).toBe("27 | Wes Anderson Style Short Film");
+    expect(projects.find((p) => p.id === "drugstore")?.tag).toEqual({ es: "Spot · Homenaje a Levi's", en: "Ad · Levi's homage" });
+  });
   it("leaves the full trailer link empty", () => { expect(TRAILER_FULL_URL).toBe(""); });
   it("supports YouTube watch, short and share links", () => {
     for (const url of ["https://www.youtube.com/watch?v=abcdefghijk", "https://youtu.be/abcdefghijk", "https://youtube.com/shorts/abcdefghijk"]) expect(youtubeId(url)).toBe("abcdefghijk");
