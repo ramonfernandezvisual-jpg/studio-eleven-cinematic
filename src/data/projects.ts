@@ -13,7 +13,7 @@ export interface Project {
 export const TRAILER_FULL_URL = "";
 export const projects: Project[] = [
   { id: "silence-guards", title: "THE SILENCE GUARDS", tag: { es: "Spot · Perfume", en: "Ad · Perfume" }, format: "vertical", videoUrl: "https://youtube.com/shorts/AgrxLTd_xc4", poster: silencePoster.url },
-  { id: "drugstore", title: "Drugstore", tag: { es: "Spot · Proyecto personal", en: "Ad · Personal project" }, format: "horizontal", videoUrl: "https://youtu.be/TAa3UVsvlIM", poster: drugstorePoster.url },
+  { id: "drugstore", title: "Drugstore", tag: { es: "Spot · Homenaje a Levi's", en: "Ad · Levi's homage" }, format: "horizontal", videoUrl: "https://youtu.be/TAa3UVsvlIM", poster: drugstorePoster.url },
   { id: "wes", title: "27 | Wes Anderson Style Short Film", tag: { es: "Corto", en: "Short film" }, format: "horizontal", videoUrl: "https://youtu.be/Z6_exORVQ-A", poster: wesPoster.url },
   { id: "nico", title: "Nico y el monstruo del tejado", tag: { es: "Corto animado", en: "Animated short" }, format: "horizontal", videoUrl: "" },
   { id: "avatar-01", title: "Avatar 01", tag: { es: "Personaje", en: "Character" }, format: "vertical", videoUrl: "" },
