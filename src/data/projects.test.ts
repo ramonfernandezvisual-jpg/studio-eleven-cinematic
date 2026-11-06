@@ -6,7 +6,7 @@ const ids = () => projects.map(({ id }) => id);
 
 describe("project configuration", () => {
   it("keeps the requested seven projects in the gallery order", () => {
-    expect(titles()).toEqual(["THE SILENCE GUARDS", "Drugstore", "Wes", "Nico y el monstruo del tejado", "Avatar 01", "Barcino Nº 29", "Moda y arquitectura"]);
+    expect(titles()).toEqual(["THE SILENCE GUARDS", "Drugstore", "27 | Wes Anderson Style Short Film", "Nico y el monstruo del tejado", "Avatar 01", "Barcino Nº 29", "Moda y arquitectura"]);
   });
   it("puts Drugstore in the second slot and Nico in the fourth", () => {
     expect(ids().slice(1, 4)).toEqual(["drugstore", "wes", "nico"]);
