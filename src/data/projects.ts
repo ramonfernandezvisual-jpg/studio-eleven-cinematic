@@ -1,6 +1,7 @@
 import silencePoster from "@/assets/silence-guards-poster.jpg.asset.json";
 import drugstorePoster from "@/assets/drugstore-poster.webp.asset.json";
 import wesPoster from "@/assets/wes-poster.webp.asset.json";
+import nicoPoster from "@/assets/nico-poster.webp.asset.json";
 import type { Locale } from "@/i18n/translations";
 export interface Project {
   id: string;
@@ -15,7 +16,7 @@ export const projects: Project[] = [
   { id: "silence-guards", title: "THE SILENCE GUARDS", tag: { es: "Spot · Perfume", en: "Ad · Perfume" }, format: "vertical", videoUrl: "https://youtube.com/shorts/AgrxLTd_xc4", poster: silencePoster.url },
   { id: "drugstore", title: "Drugstore", tag: { es: "Spot · Homenaje a Levi's", en: "Ad · Levi's homage" }, format: "horizontal", videoUrl: "https://youtu.be/TAa3UVsvlIM", poster: drugstorePoster.url },
   { id: "wes", title: "27 | Wes Anderson Style Short Film", tag: { es: "Corto", en: "Short film" }, format: "horizontal", videoUrl: "https://youtu.be/Z6_exORVQ-A", poster: wesPoster.url },
-  { id: "nico", title: "Nico y el monstruo del tejado", tag: { es: "Corto animado", en: "Animated short" }, format: "horizontal", videoUrl: "" },
+  { id: "nico", title: "Nico and the Roof Monster", tag: { es: "Corto animado", en: "Animated short" }, format: "horizontal", videoUrl: "https://youtu.be/A4fKsJuGy9M", poster: nicoPoster.url },
   { id: "avatar-01", title: "Avatar 01", tag: { es: "Personaje", en: "Character" }, format: "vertical", videoUrl: "" },
   { id: "barcino", title: "Barcino Nº 29", tag: { es: "Spot · Perfume", en: "Ad · Perfume" }, format: "horizontal", videoUrl: "" },
   { id: "moda-arquitectura", title: "Moda y arquitectura", tag: { es: "Moda y arquitectura", en: "Fashion & architecture" }, format: "horizontal", videoUrl: "" },
