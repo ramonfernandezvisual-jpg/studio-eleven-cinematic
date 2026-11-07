@@ -19,9 +19,9 @@ describe("project configuration", () => {
   });
   it("gives the Nico short the requested YouTube link and English title", () => {
     const nico = projects.find((p) => p.id === "nico");
-    expect(nico?.videoUrl).toBe("https://youtu.be/A4fKsJuGy9M");
+    expect(nico?.videoUrl).toBe("https://youtu.be/5uAEyZtJidI");
     expect(nico?.title).toBe("Nico and the Roof Monster");
-    expect(youtubeId("https://youtu.be/A4fKsJuGy9M")).toBe("A4fKsJuGy9M");
+    expect(youtubeId("https://youtu.be/5uAEyZtJidI")).toBe("5uAEyZtJidI");
   });
   it("gives the Wes short the requested YouTube link", () => {
     expect(projects.find((p) => p.id === "wes")?.videoUrl).toBe("https://youtu.be/Z6_exORVQ-A");
