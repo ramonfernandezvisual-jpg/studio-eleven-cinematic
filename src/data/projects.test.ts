@@ -6,7 +6,7 @@ const ids = () => projects.map(({ id }) => id);
 
 describe("project configuration", () => {
   it("keeps the requested seven projects in the gallery order", () => {
-    expect(titles()).toEqual(["THE SILENCE GUARDS", "Drugstore", "27 | Wes Anderson Style Short Film", "Nico y el monstruo del tejado", "Avatar 01", "Barcino Nº 29", "Moda y arquitectura"]);
+    expect(titles()).toEqual(["THE SILENCE GUARDS", "Drugstore", "27 | Wes Anderson Style Short Film", "Nico and the Roof Monster", "Avatar 01", "Barcino Nº 29", "Moda y arquitectura"]);
   });
   it("puts Drugstore in the second slot and Nico in the fourth", () => {
     expect(ids().slice(1, 4)).toEqual(["drugstore", "wes", "nico"]);
@@ -14,15 +14,21 @@ describe("project configuration", () => {
   it("uses vertical format only for Silence Guards and Avatar", () => {
     expect(projects.filter(({ format }) => format === "vertical").map(({ id }) => id)).toEqual(["silence-guards", "avatar-01"]);
   });
-  it("has playable links only for Silence Guards, Drugstore and Wes", () => {
-    expect(projects.filter(({ videoUrl }) => videoUrl !== "").map(({ id }) => id)).toEqual(["silence-guards", "drugstore", "wes"]);
+  it("has playable links only for Silence Guards, Drugstore, Wes and Nico", () => {
+    expect(projects.filter(({ videoUrl }) => videoUrl !== "").map(({ id }) => id)).toEqual(["silence-guards", "drugstore", "wes", "nico"]);
+  });
+  it("gives the Nico short the requested YouTube link and English title", () => {
+    const nico = projects.find((p) => p.id === "nico");
+    expect(nico?.videoUrl).toBe("https://youtu.be/A4fKsJuGy9M");
+    expect(nico?.title).toBe("Nico and the Roof Monster");
+    expect(youtubeId("https://youtu.be/A4fKsJuGy9M")).toBe("A4fKsJuGy9M");
   });
   it("gives the Wes short the requested YouTube link", () => {
     expect(projects.find((p) => p.id === "wes")?.videoUrl).toBe("https://youtu.be/Z6_exORVQ-A");
     expect(youtubeId("https://youtu.be/Z6_exORVQ-A")).toBe("Z6_exORVQ-A");
   });
-  it("gives both playable projects a poster image", () => {
-    for (const id of ["silence-guards", "drugstore"]) {
+  it("gives every playable project a poster image", () => {
+    for (const id of ["silence-guards", "drugstore", "wes", "nico"]) {
       const project = projects.find((p) => p.id === id);
       expect(project?.poster).toBeTruthy();
     }
