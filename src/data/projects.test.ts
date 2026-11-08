@@ -6,16 +6,16 @@ const ids = () => projects.map(({ id }) => id);
 
 describe("project configuration", () => {
   it("keeps the requested seven projects in the gallery order", () => {
-    expect(titles()).toEqual(["THE SILENCE GUARDS", "Drugstore", "27 | Wes Anderson Style Short Film", "Nico and the Roof Monster", "Avatar 01", "Barcino Nº 29", "Moda y arquitectura"]);
+    expect(titles()).toEqual(["THE SILENCE GUARDS", "Drugstore", "Barcino Nº 29", "Nico and the Roof Monster", "Avatar 01", "27 | Wes Anderson Style Short Film", "Moda y arquitectura"]);
   });
   it("puts Drugstore in the second slot and Nico in the fourth", () => {
-    expect(ids().slice(1, 4)).toEqual(["drugstore", "wes", "nico"]);
+    expect(ids().slice(1, 4)).toEqual(["drugstore", "barcino", "nico"]);
   });
   it("uses vertical format only for Silence Guards and Avatar", () => {
     expect(projects.filter(({ format }) => format === "vertical").map(({ id }) => id)).toEqual(["silence-guards", "avatar-01"]);
   });
   it("has playable links only for Silence Guards, Drugstore, Wes, Nico and Barcino", () => {
-    expect(projects.filter(({ videoUrl }) => videoUrl !== "").map(({ id }) => id)).toEqual(["silence-guards", "drugstore", "wes", "nico", "barcino"]);
+    expect(projects.filter(({ videoUrl }) => videoUrl !== "").map(({ id }) => id)).toEqual(["silence-guards", "drugstore", "barcino", "nico", "wes"]);
   });
   it("gives the Barcino ad the requested YouTube link", () => {
     expect(projects.find((p) => p.id === "barcino")?.videoUrl).toBe("https://youtu.be/4Y3LLGwufhk");
