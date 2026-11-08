@@ -14,8 +14,12 @@ describe("project configuration", () => {
   it("uses vertical format only for Silence Guards and Avatar", () => {
     expect(projects.filter(({ format }) => format === "vertical").map(({ id }) => id)).toEqual(["silence-guards", "avatar-01"]);
   });
-  it("has playable links only for Silence Guards, Drugstore, Wes and Nico", () => {
-    expect(projects.filter(({ videoUrl }) => videoUrl !== "").map(({ id }) => id)).toEqual(["silence-guards", "drugstore", "wes", "nico"]);
+  it("has playable links only for Silence Guards, Drugstore, Wes, Nico and Barcino", () => {
+    expect(projects.filter(({ videoUrl }) => videoUrl !== "").map(({ id }) => id)).toEqual(["silence-guards", "drugstore", "wes", "nico", "barcino"]);
+  });
+  it("gives the Barcino ad the requested YouTube link", () => {
+    expect(projects.find((p) => p.id === "barcino")?.videoUrl).toBe("https://youtu.be/4Y3LLGwufhk");
+    expect(youtubeId("https://youtu.be/4Y3LLGwufhk")).toBe("4Y3LLGwufhk");
   });
   it("gives the Nico short the requested YouTube link and English title", () => {
     const nico = projects.find((p) => p.id === "nico");
@@ -28,7 +32,7 @@ describe("project configuration", () => {
     expect(youtubeId("https://youtu.be/Z6_exORVQ-A")).toBe("Z6_exORVQ-A");
   });
   it("gives every playable project a poster image", () => {
-    for (const id of ["silence-guards", "drugstore", "wes", "nico"]) {
+    for (const id of ["silence-guards", "drugstore", "wes", "nico", "barcino"]) {
       const project = projects.find((p) => p.id === id);
       expect(project?.poster).toBeTruthy();
     }
