@@ -6,7 +6,7 @@ const ids = () => projects.map(({ id }) => id);
 
 describe("project configuration", () => {
   it("keeps the requested seven projects in the gallery order", () => {
-    expect(titles()).toEqual(["THE SILENCE GUARDS", "Drugstore", "Barcino Nº 29", "Nico and the Roof Monster", "Avatar 01", "27 | Wes Anderson Style Short Film", "Moda y arquitectura"]);
+    expect(titles()).toEqual(["THE SILENCE GUARDS", "Drugstore", "Barcino Nº 29", "Nico and the Roof Monster", "Avatar 01", "27 | Wes Anderson Style Short Film", "The perfect plan"]);
   });
   it("puts Drugstore in the second slot and Nico in the fourth", () => {
     expect(ids().slice(1, 4)).toEqual(["drugstore", "barcino", "nico"]);
@@ -14,8 +14,16 @@ describe("project configuration", () => {
   it("uses vertical format only for Silence Guards and Avatar", () => {
     expect(projects.filter(({ format }) => format === "vertical").map(({ id }) => id)).toEqual(["silence-guards", "avatar-01"]);
   });
-  it("has playable links only for Silence Guards, Drugstore, Wes, Nico and Barcino", () => {
-    expect(projects.filter(({ videoUrl }) => videoUrl !== "").map(({ id }) => id)).toEqual(["silence-guards", "drugstore", "barcino", "nico", "wes"]);
+  it("has playable links for every project except Avatar 01", () => {
+    expect(projects.filter(({ videoUrl }) => videoUrl !== "").map(({ id }) => id)).toEqual(["silence-guards", "drugstore", "barcino", "nico", "wes", "moda-arquitectura"]);
+  });
+  it("gives The perfect plan the requested link, English name, fashion film category and cover", () => {
+    const plan = projects.find((p) => p.id === "moda-arquitectura");
+    expect(plan?.title).toBe("The perfect plan");
+    expect(plan?.tag).toEqual({ es: "Fashion film", en: "Fashion film" });
+    expect(plan?.videoUrl).toBe("https://youtu.be/Q1xH6IFF5kc");
+    expect(youtubeId("https://youtu.be/Q1xH6IFF5kc")).toBe("Q1xH6IFF5kc");
+    expect(plan?.poster).toBeTruthy();
   });
   it("gives the Barcino ad the requested YouTube link", () => {
     expect(projects.find((p) => p.id === "barcino")?.videoUrl).toBe("https://youtu.be/4Y3LLGwufhk");
@@ -32,7 +40,7 @@ describe("project configuration", () => {
     expect(youtubeId("https://youtu.be/Z6_exORVQ-A")).toBe("Z6_exORVQ-A");
   });
   it("gives every playable project a poster image", () => {
-    for (const id of ["silence-guards", "drugstore", "wes", "nico", "barcino"]) {
+    for (const id of ["silence-guards", "drugstore", "wes", "nico", "barcino", "moda-arquitectura"]) {
       const project = projects.find((p) => p.id === id);
       expect(project?.poster).toBeTruthy();
     }
