@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUpRight, Instagram, Play, Youtube } from "lucide-react";
-import logoAsset from "@/assets/logo-studio-eleven-sin-fondo-brillante.png.asset.json";
+const logoSrc = "/logo-studio-eleven-sin-fondo-brillante.png";
 import { Button } from "@/components/ui/button";
 import { VideoViewer, type VideoSelection } from "@/components/VideoViewer";
 import { projects, TRAILER_FULL_URL, youtubeId } from "@/data/projects";
@@ -66,7 +66,7 @@ function Index() {
   }, []);
   return <>
     <header className={`header${scrolled ? " scrolled" : ""}`}>
-      <a href="#inicio" className="brand" aria-label={t.brand}><img src={logoAsset.url} alt={t.brand} width={640} height={640} /></a>
+      <a href="#inicio" className="brand" aria-label={t.brand}><img src={logoSrc} alt={t.brand} width={640} height={640} /></a>
       <nav className="nav" aria-label={t.nav.aria}>
         <div className="nav-pages"><a href="#inicio">{t.nav.inicio}</a><a href="#proyectos">{t.nav.proyectos}</a><a href="#estudio">{t.nav.estudio}</a><a href="#contacto">{t.nav.contacto}</a></div>
         <div className="language-switch" role="group" aria-label={t.nav.language}>
