@@ -19,7 +19,6 @@ export const projects: Project[] = [
   { id: "drugstore", title: "Drugstore", tag: { es: "Spot · Homenaje a Levi's", en: "Ad · Levi's homage" }, format: "horizontal", videoUrl: "https://youtu.be/TAa3UVsvlIM", poster: drugstorePoster },
   { id: "barcino", title: "Barcino Nº 29", tag: { es: "Spot · Perfume", en: "Ad · Perfume" }, format: "horizontal", videoUrl: "https://youtu.be/4Y3LLGwufhk", poster: barcinoPoster },
   { id: "nico", title: "Nico and the Roof Monster", tag: { es: "Corto animado", en: "Animated short" }, format: "horizontal", videoUrl: "https://youtu.be/5uAEyZtJidI", poster: nicoPoster },
-  { id: "avatar-01", title: "Avatar 01", tag: { es: "Personaje", en: "Character" }, format: "vertical", videoUrl: "" },
   { id: "wes", title: "27 | Wes Anderson Style Short Film", tag: { es: "Corto", en: "Short film" }, format: "horizontal", videoUrl: "https://youtu.be/Z6_exORVQ-A", poster: wesPoster },
   { id: "moda-arquitectura", title: "The perfect plan", tag: { es: "Fashion film", en: "Fashion film" }, format: "horizontal", videoUrl: "https://youtu.be/Q1xH6IFF5kc", poster: perfectPlanPoster },
 ];

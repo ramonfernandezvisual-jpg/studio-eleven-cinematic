@@ -5,16 +5,16 @@ const titles = () => projects.map(({ title }) => title);
 const ids = () => projects.map(({ id }) => id);
 
 describe("project configuration", () => {
-  it("keeps the requested seven projects in the gallery order", () => {
-    expect(titles()).toEqual(["THE SILENCE GUARDS", "Drugstore", "Barcino Nº 29", "Nico and the Roof Monster", "Avatar 01", "27 | Wes Anderson Style Short Film", "The perfect plan"]);
+  it("keeps the requested six projects in the gallery order", () => {
+    expect(titles()).toEqual(["THE SILENCE GUARDS", "Drugstore", "Barcino Nº 29", "Nico and the Roof Monster", "27 | Wes Anderson Style Short Film", "The perfect plan"]);
   });
   it("puts Drugstore in the second slot and Nico in the fourth", () => {
     expect(ids().slice(1, 4)).toEqual(["drugstore", "barcino", "nico"]);
   });
-  it("uses vertical format only for Silence Guards and Avatar", () => {
-    expect(projects.filter(({ format }) => format === "vertical").map(({ id }) => id)).toEqual(["silence-guards", "avatar-01"]);
+  it("uses vertical format only for Silence Guards", () => {
+    expect(projects.filter(({ format }) => format === "vertical").map(({ id }) => id)).toEqual(["silence-guards"]);
   });
-  it("has playable links for every project except Avatar 01", () => {
+  it("has playable links for every project", () => {
     expect(projects.filter(({ videoUrl }) => videoUrl !== "").map(({ id }) => id)).toEqual(["silence-guards", "drugstore", "barcino", "nico", "wes", "moda-arquitectura"]);
   });
   it("gives The perfect plan the requested link, English name, fashion film category and cover", () => {
