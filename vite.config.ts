@@ -12,7 +12,7 @@ export default defineConfig({
   // into .netlify/functions-internal, leaving the prerenderer without dist/server/server.js.
   // Disabling it there lets TanStack Start emit its own SSR bundle for prerendering.
   // Lovable builds keep the default nitro behaviour.
-  nitro: process.env.NETLIFY ? false : undefined,
+  nitro: process.env.NETLIFY || process.env.GITHUB_ACTIONS ? false : undefined,
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
